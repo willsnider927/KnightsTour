@@ -21,7 +21,7 @@ The Algorithm is able to construct closed, corner closed, open, and stretched to
 The paper discusses seperate functions for open and closed boards, however the closed function only needs one extra
 case to allow it to do all of the boards and so that is how it is implemented in the program.
 
-Definitions of all the types of boards are found in the paper above.
+Definitions of all the types of boards are found in the pdf.
  
 Two special cases exist, for 3*m boards, constructing the tours involves finding a 3*k structured board that 
 satisfies the original requested board, where k = ((m-7) mod 4) + 7 for open boards, and k = ((m-9) mod 4) + 9 for 
