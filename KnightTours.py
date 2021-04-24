@@ -151,13 +151,25 @@ def Knight(n,m, required, side,catalog):
     elif 4 <= n and n <= 10 and m >10: #can be built from bases found in case 1 and spliting into two sections
         m1 = (m//4)*2 +(m%2) #m1 is guaranteed odd and m2 even, guarantees we can create a stretched in second partitioning
         m2 = m - m1
-        path1 = Knight(n,m1,required,side,catalog)
+        if n<=m1:
+            path1 = Knight(n,m1,required,side,catalog)
+        else:
+            path1 = Knight(m1,n,required,not side,catalog)
+            path1 = [n-1 - i%n + (i//n)*n for i in path1]
+            path1 = [i//n + (n-1 -i%n)*m1 for i in path1]
+        if n <=m2:
+            path2 = Knight(n,m2,"stretched",0,catalog)
+        else:
+            path2 = Knight(m2,n,"stretched",1,catalog)
+            path2 = [n-1 - i%n + (i//n)*n for i in path2]
+            path2 = [i//n + (n-1 -i%n)*m2 for i in path2]
+
         if(path1.index(m1-2) > path1.index((m1*3)-1)):
             path1 == path1[::-1]
             if required == "corner":
                 path1.remove(0)
                 path1.insert(0,0)
-        path2 = Knight(n,m2,"stretched",0,catalog)
+
         if path2[0] == 0:
             path2 = path2[::-1]
         path2 = [i%m2 + (i//m2)*m +m1 for i in path2]
@@ -172,7 +184,7 @@ def Knight(n,m, required, side,catalog):
         if n1 <= m1: #force each board to be n<m, mirror and rotate -90degrees if they arent
             path1 = Knight(n1,m1,required,side,catalog)
         else: 
-            path1 = Knight(m1,n1,required,side,catalog)
+            path1 = Knight(m1,n1,required,not side,catalog)
             path1 = [n1-1 - i%n1 + (i//n1)*n1 for i in path1]
             path1 = [i//n1 + (n1-1 -i%n1)*m1 for i in path1]
         if n2 <= m1:
@@ -190,7 +202,7 @@ def Knight(n,m, required, side,catalog):
         if n1 <= m2:
             path2 = Knight(n1,m2,"stretched",0,catalog)
         else:
-            path2 = Knight(m2,n1,"stretched",0,catalog)
+            path2 = Knight(m2,n1,"stretched",1,catalog)
             path2 = [n1-1 - i%n1 + (i//n1)*n1 for i in path2]
             path2 = [i//n1 + (n1-1 - i%n1)*m2 for i in path2]
 
@@ -225,6 +237,7 @@ def Knight(n,m, required, side,catalog):
                 path1_2.insert(0,0)
         path = path1_2[0:path1_2.index((n1-1)*m +2) +1] + path3_4 + path1_2[path1_2.index((n1-1)*m +2) +1:n1*m] #stitch 1_2 and 3_4 together
         return path
+
 
 
 
