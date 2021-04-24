@@ -187,7 +187,7 @@ def Knight(n,m, required, side,catalog):
             path4 = Knight(m2,n2,"stretched",1,catalog)
             path4 = [n2-1 - i%n2 + (i//n2)*n2 for i in path4]
             path4 = [i//n2 + (n2-1 -i%n2)*m2 for i in path4]
-        if n2 <= m1:
+        if n1 <= m2:
             path2 = Knight(n1,m2,"stretched",0,catalog)
         else:
             path2 = Knight(m2,n1,"stretched",0,catalog)
@@ -225,7 +225,6 @@ def Knight(n,m, required, side,catalog):
                 path1_2.insert(0,0)
         path = path1_2[0:path1_2.index((n1-1)*m +2) +1] + path3_4 + path1_2[path1_2.index((n1-1)*m +2) +1:n1*m] #stitch 1_2 and 3_4 together
         return path
-
 
 
 
