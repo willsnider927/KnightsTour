@@ -50,7 +50,6 @@ def buildCatalog():
     cat["double4,5,0"] = [1,8,19,12,15,6,3,14,17,10]
     return cat
 
-
 #generate a closed, open, corner closed, or stretched knights tour from an arbritarily sized boared in linear time
 def Knight(n,m, required, side,catalog):
     if n <= 10 and m <= 10: #can be found from the heuristic search
@@ -171,9 +170,11 @@ def Knight(n,m, required, side,catalog):
         m1,n1 = (m//4)*2 +(m%2), (n//4)*2 +(n%2) #partionioning guarantees the same as previous case, only one board will be odd
         m2, n2 = m-m1, n-n1
         path1 = Knight(n1,m1,required,side,catalog)
-        path2 = Knight(n1,m2,"stretched",0,catalog)
         path3 = Knight(n2,m1,"stretched",1,catalog)
         path4 = Knight(n2,m2,"stretched",0,catalog)
+        path2 = [m1-1 - i%m1 + (i//m1)*m1 for i in path3] #path2 is identical to path3, just mirrored and rotated -90degrees, this is done as n2 is always <=m1. It is also faster
+        path2 = [i//m1 + (m1-1 - i%m1)*n2 for i in path2]
+
         if path2[0] == 0:
             path2 = path2[::-1]
         if path4[0] == 0:
@@ -205,5 +206,6 @@ def Knight(n,m, required, side,catalog):
                 path1_2.insert(0,0)
         path = path1_2[0:path1_2.index((n1-1)*m +2) +1] + path3_4 + path1_2[path1_2.index((n1-1)*m +2) +1:n1*m] #stitch 1_2 and 3_4 together
         return path
+
 
 
