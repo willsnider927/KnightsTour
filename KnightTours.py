@@ -169,11 +169,30 @@ def Knight(n,m, required, side,catalog):
     elif n>10 and m >10: #can be segmented into 4 different boards
         m1,n1 = (m//4)*2 +(m%2), (n//4)*2 +(n%2) #partionioning guarantees the same as previous case, only one board will be odd
         m2, n2 = m-m1, n-n1
-        path1 = Knight(n1,m1,required,side,catalog)
-        path3 = Knight(n2,m1,"stretched",1,catalog)
-        path4 = Knight(n2,m2,"stretched",0,catalog)
-        path2 = [m1-1 - i%m1 + (i//m1)*m1 for i in path3] #path2 is identical to path3, just mirrored and rotated -90degrees, this is done as n2 is always <=m1. It is also faster
-        path2 = [i//m1 + (m1-1 - i%m1)*n2 for i in path2]
+        if n1 <= m1: #force each board to be n<m, mirror and rotate -90degrees if they arent
+            path1 = Knight(n1,m1,required,side,catalog)
+        else: 
+            path1 = Knight(m1,n1,required,side,catalog)
+            path1 = [n1-1 - i%n1 + (i//n1)*n1 for i in path1]
+            path1 = [i//n1 + (n1-1 -i%n1)*m1 for i in path1]
+        if n2 <= m1:
+            path3 = Knight(n2,m1,"stretched",1,catalog)
+        else:
+            path3 = Knight(m1,n2,"stretched",0,catalog)
+            path3 = [n2-1 - i%n2 + (i//n2)*n2 for i in path3]
+            path3 = [i//n2 + (n2-1 -i%n2)*m1 for i in path3]
+        if n2 <= m2:
+            path4 = Knight(n2,m2,"stretched",0,catalog)
+        else:
+            path4 = Knight(m2,n2,"stretched",1,catalog)
+            path4 = [n2-1 - i%n2 + (i//n2)*n2 for i in path4]
+            path4 = [i//n2 + (n2-1 -i%n2)*m2 for i in path4]
+        if n2 <= m1:
+            path2 = Knight(n1,m2,"stretched",0,catalog)
+        else:
+            path2 = Knight(m2,n1,"stretched",0,catalog)
+            path2 = [n1-1 - i%n1 + (i//n1)*n1 for i in path2]
+            path2 = [i//n1 + (n1-1 - i%n1)*m2 for i in path2]
 
         if path2[0] == 0:
             path2 = path2[::-1]
@@ -206,6 +225,7 @@ def Knight(n,m, required, side,catalog):
                 path1_2.insert(0,0)
         path = path1_2[0:path1_2.index((n1-1)*m +2) +1] + path3_4 + path1_2[path1_2.index((n1-1)*m +2) +1:n1*m] #stitch 1_2 and 3_4 together
         return path
+
 
 
 
