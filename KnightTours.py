@@ -60,7 +60,7 @@ def Knight(n,m, required, side,catalog):
         if required == "stretched":
             path = catalog["stretch%d,%d,%d" %(n,m,side)]
             if (path[0] != 0):
-                path = path[::-1] #reversing a list
+                path.reverse() #reversing a list
             return path
         if required == "corner":
             return HeuristicApproach.KnightsTour(m,n,[],[],2).path
@@ -86,7 +86,7 @@ def Knight(n,m, required, side,catalog):
             else:
                 closed = HeuristicApproach.KnightsTour(k,3,[],[],1).path #closed
         if closed.index(k-2) < closed.index((k*n)-1): #ensure the index needed to jump from board to board is first
-            closed = closed[::-1]
+            closed.reverse()
             if required == "corner": #ensure zero at square 0 in case of corner
                 closed.remove(0)
                 closed.insert(0,0)
@@ -143,7 +143,7 @@ def Knight(n,m, required, side,catalog):
         path1End = catalog["double4,5,1"][8:] + catalog["double4,5,1"][0:6] #add the end of each path
         path1 = path1 + [i%5 +k + (i//5)*m for i in path1End]
         path2 = path2 + [i%5 +k + (i//5)*m for i in path14to10]
-        path1 = path1[::-1] #reverse path1
+        path1.reverse() #reverse path1
         path = path2 + [i%k + (i//k)*m for i in pathK] + path1 #combine the paths
         return path
 
@@ -163,18 +163,19 @@ def Knight(n,m, required, side,catalog):
             path2 = Knight(m2,n,"stretched",1,catalog)
             path2 = [n-1 - i%n + (i//n)*n for i in path2]
             path2 = [i//n + (n-1 -i%n)*m2 for i in path2]
-
+        path1New = path1
+        path2New = path2
         if(path1.index(m1-2) > path1.index((m1*3)-1)):
-            path1 == path1[::-1]
+            path1New = path1[::-1]
             if required == "corner":
-                path1.remove(0)
-                path1.insert(0,0)
+                path1New.remove(0)
+                path1New.insert(0,0)
 
         if path2[0] == 0:
-            path2 = path2[::-1]
-        path2 = [i%m2 + (i//m2)*m +m1 for i in path2]
+            path2New = path2[::-1]
+        path2New = [i%m2 + (i//m2)*m +m1 for i in path2New]
         #stiches together the segments from each tour we need
-        path = [i%m1 + (i//m1)*m for i in path1[0:path1.index(m1-2)+1]] + path2 + [i%m1 + (i//m1)*m for i in path1[path1.index(m1-2)+1:]]
+        path = [i%m1 + (i//m1)*m for i in path1New[0:path1New.index(m1-2)+1]] + path2New + [i%m1 + (i//m1)*m for i in path1New[path1New.index(m1-2)+1:]]
         return path
 
 
@@ -205,39 +206,41 @@ def Knight(n,m, required, side,catalog):
             path2 = Knight(m2,n1,"stretched",1,catalog)
             path2 = [n1-1 - i%n1 + (i//n1)*n1 for i in path2]
             path2 = [i//n1 + (n1-1 - i%n1)*m2 for i in path2]
+        path1New = path1
+        path2New = path2
+        path3New = path3
+        path4New = path4
 
         if path2[0] == 0:
-            path2 = path2[::-1]
+            path2New = path2[::-1]
         if path4[0] == 0:
-            path4 = path4[::-1]
+            path4New = path4[::-1]
         
         #stictch boards 1 and 2 togehter first 
         if(path1.index(m1-2) > path1.index((m1*3)-1)):
-            path1 = path1[::-1]
+            path1New = path1[::-1]
             if required == "corner":
-                path1.remove(0)
-                path1.insert(0,0)
-        path2 = [i%m2 + (i//m2)*m +m1 for i in path2]
-        path1_2 = [i%m1 + (i//m1)*m for i in path1[0:path1.index(m1-2)+1]] + path2 + [i%m1 + (i//m1)*m for i in path1[path1.index(m1-2)+1:m1*n1]]
+                path1New.remove(0)
+                path1New.insert(0,0)
+        path2New = [i%m2 + (i//m2)*m +m1 for i in path2New]
+        path1_2 = [i%m1 + (i//m1)*m for i in path1New[0:path1New.index(m1-2)+1]] + path2New + [i%m1 + (i//m1)*m for i in path1New[path1New.index(m1-2)+1:m1*n1]]
 
         #stitch 3 and 4 together
         if(path3.index(m1-2) > path3.index((m1*3)-1)):
-            path3 = path3[::-1]
-        path4 = [i%m2 + (i//m2)*m + m1 for i in path4]
-        path3_4 =  [i%m1 + (i//m1)*m for i in path3[0:path3.index(m1-2)+1]] + path4 + [i%m1 + (i//m1)*m for i in path3[path3.index(m1-2)+1:m1*n2]]
+            path3New = path3[::-1]
+        path4New = [i%m2 + (i//m2)*m + m1 for i in path4New]
+        path3_4 =  [i%m1 + (i//m1)*m for i in path3New[0:path3New.index(m1-2)+1]] + path4New + [i%m1 + (i//m1)*m for i in path3New[path3New.index(m1-2)+1:m1*n2]]
         path3_4 = [i + n1*m for i in path3_4] #adjust 3_4 squares for being the lower half
 
         #ensures all the paths are ordered correctly
         if path3_4[0] != n1*m: 
-            path3_4 = path3_4[::-1]
+            path3_4.reverse()
         if path1_2.index((n1-1)*m +2) > path1_2.index((n1-2)*m):
-            path1_2 = path1_2[::-1]
+            path1_2.reverse()
             if required == "corner":
                 path1_2.remove(0)
                 path1_2.insert(0,0)
         path = path1_2[0:path1_2.index((n1-1)*m +2) +1] + path3_4 + path1_2[path1_2.index((n1-1)*m +2) +1:n1*m] #stitch 1_2 and 3_4 together
         return path
-
-
 
 
