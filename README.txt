@@ -1,4 +1,4 @@
-Optimal Knights Tour Algorithm:
+Optimal Knights Tour Algorithm: 
 Created by Will Snider and Tucker Travins for CU Boulder's ECEN2703 Discrete Mathamatics
 
 Required Packages:
